@@ -1,4 +1,4 @@
-"""Boundary IoU (Cheng, Girshick, Dollar, Schwing & Kirillov, CVPR 2021).
+"""Boundary IoU (Cheng, Girshick, Dollar, Berg & Kirillov, CVPR 2021).
 
 Reference: "Boundary IoU: Improving Object-Centric Image Segmentation Evaluation"
 arXiv:2103.16562

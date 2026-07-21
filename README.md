@@ -43,11 +43,14 @@ all-or-nothing outcome more likely, not less. These are lower bounds on the risk
 
 ### 2. Tail AP is quantized far coarser than the improvements being claimed
 
-With `k` ground-truth instances in the test split, recall can take only the
-`k+1` values `{0, 1/k, ..., 1}`, so per-class AP moves in steps of roughly
-`1/k`. At `k = 1` a class AP is close to a coin flip: a single detection moves
-it the whole distance from 0 to 1. A reported "+2 mAP" driven by such a class is
-noise, not a result.
+With `k` ground-truth instances in the test split, *recall* can take only the
+`k+1` values `{0, 1/k, ..., 1}`. AP is not a clean multiple of `1/k`, because
+precision still varies with false positives, but it inherits that coarseness:
+per-class AP moves in jumps on the order of `1/k` rather than continuously.
+
+At `k = 1` a class AP is close to a coin flip: a single detection moves it the
+whole distance from 0 to 1. A reported "+2 mAP" driven by such a class is noise,
+not a result.
 
 `split_audit.ap_delta_noise_floor()` computes the smallest mAP change that is
 not pure quantization, which is the number a performance contract should be
@@ -119,7 +122,8 @@ Ranked by evidence strength per unit of effort, all citable:
 1. **Repeat factor sampling** (Gupta et al., CVPR 2019, [arXiv:1904.03797](https://arxiv.org/abs/1904.03797)).
    Sampler configuration only. The base every method below is measured on top of.
 2. **Copy-paste augmentation** (Ghiasi et al., CVPR 2021, [arXiv:2012.07177](https://arxiv.org/abs/2012.07177)).
-   Reported +3.6 mask AP on rare classes, explicitly additive with RFS, and it
+   Their copy-paste model beat the LVIS 2020 Challenge winning entry by +3.6
+   mask AP on rare categories (abstract, verbatim). Additive with RFS, and it
    works natively in YOLOv8-seg via the `copy_paste` hyperparameter because
    polygon labels already exist.
 3. **ECM Loss** (Cho & Krähenbühl, ECCV 2022, [arXiv:2301.09724](https://arxiv.org/abs/2301.09724)).
@@ -147,7 +151,7 @@ split sizes and class counts.
 ## References
 
 - Gupta, Dollár & Girshick. *LVIS: A Dataset for Large Vocabulary Instance Segmentation.* CVPR 2019. [arXiv:1904.03797](https://arxiv.org/abs/1904.03797)
-- Cheng, Girshick, Dollár, Schwing & Kirillov. *Boundary IoU: Improving Object-Centric Image Segmentation Evaluation.* CVPR 2021. [arXiv:2103.16562](https://arxiv.org/abs/2103.16562)
+- Cheng, Girshick, Dollár, Berg & Kirillov. *Boundary IoU: Improving Object-Centric Image Segmentation Evaluation.* CVPR 2021. [arXiv:2103.16562](https://arxiv.org/abs/2103.16562)
 - Ghiasi et al. *Simple Copy-Paste is a Strong Data Augmentation Method for Instance Segmentation.* CVPR 2021. [arXiv:2012.07177](https://arxiv.org/abs/2012.07177)
 - Cho & Krähenbühl. *Long-tail Detection with Effective Class-Margins.* ECCV 2022. [arXiv:2301.09724](https://arxiv.org/abs/2301.09724)
 - Wang et al. *Seesaw Loss for Long-Tailed Instance Segmentation.* CVPR 2021. [arXiv:2008.10032](https://arxiv.org/abs/2008.10032)

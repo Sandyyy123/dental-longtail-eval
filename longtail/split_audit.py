@@ -11,11 +11,13 @@ Two distinct problems:
    no test instances is silently a 25-class mAP. The number is not wrong, it is
    answering a different question than the one it appears to answer.
 
-2. QUANTIZED AP. With k ground-truth instances in the test split, recall can
-   only take the k+1 values {0, 1/k, ..., 1}. Average precision is therefore
-   quantized in steps of roughly 1/k. At k=1 the class AP is close to a coin
-   flip: one detection moves it between 0 and 1. Reporting a delta of "+2.3 mAP"
-   that is driven by such a class is noise, not improvement.
+2. COARSE AP. With k ground-truth instances in the test split, *recall* can only
+   take the k+1 values {0, 1/k, ..., 1}. Average precision is not a clean
+   multiple of 1/k, since precision still varies with false positives, but it
+   inherits that coarseness: AP moves in jumps on the order of 1/k. At k=1 the
+   class AP is close to a coin flip: one detection moves it between 0 and 1.
+   Reporting a delta of "+2.3 mAP" driven by such a class is noise, not
+   improvement.
 
 The audit quantifies both, so that improvement claims can be restricted to the
 classes where the metric is meaningful.
@@ -50,7 +52,7 @@ class ClassAudit:
 
     @property
     def quantization_step(self) -> float:
-        """Coarsest resolution of AP for this class: 1/k, or 1.0 if k == 0."""
+        """Order-of-magnitude resolution of AP for this class: 1/k, or 1.0 if k == 0."""
         k = self.observed_or_expected
         return 1.0 if k < 1 else 1.0 / k
 
